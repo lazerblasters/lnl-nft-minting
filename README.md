@@ -43,3 +43,7 @@ Select `Create a basic sample project` and say `Yes` to everything. Your console
 You should see `Hello Hardhat` printed in your console along with other things:
 
 ![npx-hardhat-test](./assets/npx-hardhat-test.png)
+
+5. Delete `contracts/Greeter.sol` file. Keep the `contracts` folder.
+6. Delete `scripts/sample-script.js` file. Keep the `scripts` folder.
+7. Delete `test/sample-test.js` file. Keep the `test` folder.
