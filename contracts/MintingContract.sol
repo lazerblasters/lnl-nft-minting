@@ -131,6 +131,9 @@ contract MintingContract is ERC721URIStorage {
         _safeMint(address to, uint256 tokenId, bytes _data)
         Internal function to safely mint a new token. Reverts if the given token ID already exists.
         Check: https://docs.openzeppelin.com/contracts/2.x/api/token/erc721#ERC721-_safeMint-address-uint256-
+
+        msg.sender is a global variable available to us. It returns an address type.
+        Check: https://docs.soliditylang.org/en/v0.8.7/cheatsheet.html?highlight=encodepacked#global-variables
         */
         _safeMint(msg.sender, tokenId);
 
