@@ -196,5 +196,7 @@ main()
 ```
 3. Run `npx hardhat run ./scripts/run.js`. The output should look something like this.
 
+*Note: make sure the next app is running, otherwise this script will fail*
+
 ![npx-hardhat-test-2](../minting-an-nft/assets/npx-hardhat-test-2.png)
 
