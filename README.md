@@ -33,8 +33,14 @@ We will be using [Solidity](https://docs.soliditylang.org/en/v0.8.9/) to write o
 We will start by create a basic NFT minting contract which will console log a message.
 
 1. Create a directory `mkdir minting-an-nft`
-2. Run `npm init -y`
-3. Run `npx hardhat install`
+2. Create `package.json` file
+```console
+npm init -y
+```
+3. Install `hardhat`
+```console
+npx hardhat install
+```
 
 Select `Create a basic sample project` and say `Yes` to everything. Your console output would look something like this:
 
@@ -74,7 +80,11 @@ main()
   });
 ```
 
-10. Run `npx hardhat run ./scripts/run.js`. The output should contain the console log string and a hash that is the address of the contract. This address will be useful for our frontend.
+10. Run the `run.js` script. The output should contain the console log string and a hash that is the address of the contract. This address will be useful for our frontend.
+
+```console
+npx hardhat run ./scripts/run.js
+```
 
 ![npx-hardhat-run-script-first-time](../minting-an-nft/assets/npx-hardhat-run-script-first-time.png)
 
@@ -82,8 +92,16 @@ main()
 
 We need start out next app to create an endpoint which out NFT minting contract can use to general NFT metadata.
 
-1. Run `npx create-next-app@latest --ts` and enter the name of the project. I called it `website`.
-2. Run `cd website && yarn dev`. The next app should be started on `localhost:3000`.
+1. Create nextjs app. I called it `website`.
+```console
+npx create-next-app@latest --ts
+```
+2. Navigate to `website` folder and start dev server.
+```console
+cd website && yarn dev
+```
+The next app should be started on `localhost:3000`.
+
 3. Replace the content of `website/pages/index.tsx` with the following content.
 
 *Note: see this [gist](https://gist.github.com/ximxim/8c0f1d520aaad3c2705c8b6fb09d0ffb) for detailed notes on this component.*
@@ -138,7 +156,10 @@ export default Home;
 ```
 
 4. Delete `website/api/hello.ts` file. Keep the folders.
-5. Run `mkdir -p "pages/api/tokens" && touch "pages/api/tokens/[id].ts"` while in `website` directory.
+5. While in `website` directory, create `pages/api/tokens/[id].ts`.
+```console
+mkdir -p "pages/api/tokens" && touch "pages/api/tokens/[id].ts"
+```
 6. Write the following code in the new `website/pages/api/tokens[id].ts` file.
 
 *Note: see this [gist](https://gist.github.com/ximxim/1a7c69f9b6c8714f686aa5f6a6f08ca9) for detailed notes on this handler.*
@@ -158,7 +179,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 export default handler;
 ```
 
-7. Test the handler. Run `curl --location --request GET 'localhost:3000/api/tokens/1'`.
+7. Test the new `api/tokens/[id]` handler.
+```console
+curl --location --request GET 'localhost:3000/api/tokens/1'
+```
 
 ![handler-test](../minting-an-nft/assets/handler-test.png)
 
@@ -194,9 +218,14 @@ main()
     process.exit(1);
   });
 ```
-3. Run `npx hardhat run ./scripts/run.js`. The output should look something like this.
+3. While in root folder. Run the contract.
+```console
+npx hardhat run ./scripts/run.js
+```
 
 *Note: make sure the next app is running, otherwise this script will fail*
+
+The output should look something like this.
 
 ![npx-hardhat-test-2](../minting-an-nft/assets/npx-hardhat-test-2.png)
 
@@ -214,7 +243,10 @@ Running `curl --location --request GET 'https://website-kzspirq6d-ximxim.vercel.
 
 We will use [Rinkeby](ttps://www.rinkeby.io/) test net. This way we don't use real money when deploying.
 
-1. Run `echo '{"ALCHEMY_KEY": "", "PRIVATE_KEY": ""}' >> secrets.json`.
+1. Create `secrets.json` file.
+```console
+echo '{"ALCHEMY_KEY": "", "PRIVATE_KEY": ""}' >> secrets.json
+```
 2. [Create an Alchemy Key](https://docs.alchemy.com/alchemy/introduction/getting-started#1.create-an-alchemy-key) and place it in `secrets.json`.
 2. [Get Metamask Private Key](https://metamask.zendesk.com/hc/en-us/articles/360015289632-How-to-Export-an-Account-Private-Key) and place it in `secrets.json`.
 
@@ -247,7 +279,10 @@ module.exports = {
 };
 ```
 
-4. Run `cp scripts/run.js scripts/deploy.js` to create a deploy script.
+4. Create a deploy script.
+```console
+cp scripts/run.js scripts/deploy.js
+```
 5. Replace `http://localhost:3000` in `scripts/deploy.js` with your vercel url `https://website-kzspirq6d-ximxim.vercel.app/`
 
 *Note: see this [gist](https://gist.github.com/ximxim/7ae2c7d25c5d6b6ef1fdc7369f2ad406) for detailed notes on this script.*
@@ -278,7 +313,10 @@ main()
   });
 ```
 
-6. Run `npx hardhat run --network rinkeby ./scripts/deploy.js` in order to deploy to rinkeby network.
+6. Deploy to rinkeby network.
+```console
+npx hardhat run --network rinkeby ./scripts/deploy.js
+```
 
 *Note: Keep track of the address hash, we will need this to make requests from the frontend.*
 
@@ -287,3 +325,17 @@ main()
 The contract is deployed and an NFT should be minted at this point. Try navigating to this link `https://testnets.opensea.io/assets/<CONTRACT_ADDRESS>/1`.
 
 Also, try `https://rinkeby.etherscan.io/address/<CONTRACT_ADDRESS>`.
+
+## Finish front end
+
+1. While in root directory. Copy `MintingContract.json` from `artifacts/contracts` to your frontend project.
+```console
+cp artifacts/contracts/MintingContract.sol/MintingContract.json website/MintingContract.json
+```
+2. Install [ethers](https://www.npmjs.com/package/ethers) package.
+```console
+cd website && npm install ethers
+```
+3. Replace the content of `website/pages/index.tsx` with the content this [gist](https://gist.github.com/ximxim/2b3055f27d875dd5e73bfc1c3600dac8).
+
+That's all, we have a working DAPP that mints NFTs for us.
