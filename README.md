@@ -209,3 +209,81 @@ My deployment link is [https://website-kzspirq6d-ximxim.vercel.app/](https://web
 Running `curl --location --request GET 'https://website-kzspirq6d-ximxim.vercel.app/api/tokens/1'` successfully returns our NFT metadata.
 
 ![vercel-test](../minting-an-nft/assets/vercel-test.png)
+
+## Deploy Smart Contract
+
+We will use [Rinkeby](ttps://www.rinkeby.io/) test net. This way we don't use real money when deploying.
+
+1. Run `echo '{"ALCHEMY_KEY": "", "PRIVATE_KEY": ""}' >> secrets.json`.
+2. [Create an Alchemy Key](https://docs.alchemy.com/alchemy/introduction/getting-started#1.create-an-alchemy-key) and place it in `secrets.json`.
+2. [Get Metamask Private Key](https://metamask.zendesk.com/hc/en-us/articles/360015289632-How-to-Export-an-Account-Private-Key) and place it in `secrets.json`.
+
+![secrets-json](../minting-an-nft/assets/secrets-json.png)
+
+3. Modify `hardhat.config.js` and add `networks` key to default export using our `secrets.json` file.
+
+*Note: see this [gist](https://gist.github.com/ximxim/c1b969a3205ac3facad029bed3b39e58) for detailed notes on this script.*
+
+```javascript
+const secret = require('./secrets.json');
+require("@nomiclabs/hardhat-waffle");
+
+task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
+  const accounts = await hre.ethers.getSigners();
+
+  for (const account of accounts) {
+    console.log(account.address);
+  }
+});
+
+module.exports = {
+  solidity: "0.8.4",
+  networks: {
+    rinkeby: {
+      url: secret.ALCHEMY_KEY,
+      accounts: [secret.PRIVATE_KEY],
+    },
+  }
+};
+```
+
+4. Run `cp scripts/run.js scripts/deploy.js` to create a deploy script.
+5. Replace `http://localhost:3000` in `scripts/deploy.js` with your vercel url `https://website-kzspirq6d-ximxim.vercel.app/`
+
+*Note: see this [gist](https://gist.github.com/ximxim/7ae2c7d25c5d6b6ef1fdc7369f2ad406) for detailed notes on this script.*
+
+```javascript
+const hre = require("hardhat");
+
+async function main() {
+  const contract = await hre.ethers.getContractFactory("MintingContract");
+  const token = await contract.deploy('https://website-kzspirq6d-ximxim.vercel.app/api/tokens/');
+
+  await token.deployed();
+
+  console.log("Greeter deployed to:", token.address);
+
+  let txn = await token.mintBasicNFT();
+  await txn.wait();
+
+  txn = await token.mintBasicNFT();
+  await txn.wait();
+}
+
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+```
+
+6. Run `npx hardhat run --network rinkeby ./scripts/deploy.js` in order to deploy to rinkeby network.
+
+*Note: Keep track of the address hash, we will need this to make requests from the frontend.*
+
+![npx-hardhat-rinkeby](../minting-an-nft/assets/npx-hardhat-rinkeby.png)
+
+The contract is deployed and an NFT should be minted at this point. Try navigating to this link `https://testnets.opensea.io/assets/<CONTRACT_ADDRESS>/1`.
+
+Also, try `https://rinkeby.etherscan.io/address/<CONTRACT_ADDRESS>`.
