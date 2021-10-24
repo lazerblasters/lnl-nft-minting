@@ -28,7 +28,7 @@ We will be using [Solidity](https://docs.soliditylang.org/en/v0.8.9/) to write o
 - node: 16.0.0
 
 
-## Instructions
+## Create a basic NFT minting contract
 
 1. Create a directory `mkdir minting-an-nft`
 2. run `npm init -y`
@@ -47,3 +47,33 @@ You should see `Hello Hardhat` printed in your console along with other things:
 5. Delete `contracts/Greeter.sol` file. Keep the `contracts` folder.
 6. Delete `scripts/sample-script.js` file. Keep the `scripts` folder.
 7. Delete `test/sample-test.js` file. Keep the `test` folder.
+8. Create `contracts/MintingContract.sol` file and add the content from this [gist](https://gist.github.com/ximxim/1c6129a51eb5b2b175f13d2c00854f6f).
+9. Create `scripts/run.js` file and add the following content.
+
+*Note: see this [gist](https://gist.github.com/ximxim/9d294e0ddf8673ef27b3528e6a0a633c) for detailed notes on this script.*
+
+```javascript
+const hre = require("hardhat");
+
+async function main() {
+  const contract = await hre.ethers.getContractFactory("MintingContract");
+  const token = await contract.deploy();
+
+  await token.deployed();
+
+  console.log("Greeter deployed to:", token.address);
+}
+
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+```
+
+10. run `npx hardhat run ./scripts/run.js`. The output should contain the console log string and a hash that is the address of the contract. This address will be useful for our frontend.
+
+![npx-hardhat-run-script-first-time](../minting-an-nft/assets/npx-hardhat-run-script-first-time.png)
+
+
