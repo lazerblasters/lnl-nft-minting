@@ -161,3 +161,40 @@ export default handler;
 7. Test the handler. Run `curl --location --request GET 'localhost:3000/api/tokens/1'`.
 
 ![handler-test](../minting-an-nft/assets/handler-test.png)
+
+## Finish smart contract logic
+
+1. Replace `contracts/MintingContract.sol` content with content in this [gist](https://gist.github.com/ximxim/3d5faff9c6211a71255645d10031eb73).
+2. Replace `scripts/run.js` content with the following.
+
+*Note: see this [gist](https://gist.github.com/ximxim/b94e7c3f78436c286ca3c1410da615ad) for detailed notes on this script.*
+
+```javascript
+const hre = require("hardhat");
+
+async function main() {
+  const contract = await hre.ethers.getContractFactory("MintingContract");
+  const token = await contract.deploy('http://localhost:3000/api/tokens/');
+
+  await token.deployed();
+
+  console.log("Greeter deployed to:", token.address);
+
+  let txn = await token.mintBasicNFT();
+  await txn.wait();
+
+  txn = await token.mintBasicNFT();
+  await txn.wait();
+}
+
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+```
+3. Run `npx hardhat run ./scripts/run.js`. The output should look something like this.
+
+![npx-hardhat-test-2](../minting-an-nft/assets/npx-hardhat-test-2.png)
+

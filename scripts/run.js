@@ -21,11 +21,29 @@ async function main() {
    *   We get the contract to deploy
    */
   const contract = await hre.ethers.getContractFactory("MintingContract");
-  const token = await contract.deploy();
+  /**
+   * We can pass baseTokenURI string param the MintingContract constructor requires
+   * in this deploy function.
+   */
+  const token = await contract.deploy('http://localhost:3000/api/tokens/');
 
   await token.deployed();
 
   console.log("Greeter deployed to:", token.address);
+
+  /**
+   * we can call our mintBasicNFT public function using token
+   * variable. It returns a promise, that we will wait for before
+   * minting another basic NFT.
+   */
+  let txn = await token.mintBasicNFT();
+  await txn.wait();
+
+  /**
+   * Minting another NFT to test the counter
+   */
+  txn = await token.mintBasicNFT();
+  await txn.wait();
 }
 
 /**
