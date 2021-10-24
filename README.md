@@ -200,3 +200,12 @@ main()
 
 ![npx-hardhat-test-2](../minting-an-nft/assets/npx-hardhat-test-2.png)
 
+## Deploy Next App to Vercel
+
+Feel free to deploy your next app to hosting service of your choice, I am going to deploy Vercel. Follow this [guide](https://www.geeksforgeeks.org/how-to-deploy-next-js-app-to-vercel/) to deploy your next app.
+
+My deployment link is [https://website-kzspirq6d-ximxim.vercel.app/](https://website-kzspirq6d-ximxim.vercel.app/).
+
+Running `curl --location --request GET 'https://website-kzspirq6d-ximxim.vercel.app/api/tokens/1'` successfully returns our NFT metadata.
+
+![vercel-test](../minting-an-nft/assets/vercel-test.png)
