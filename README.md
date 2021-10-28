@@ -86,7 +86,7 @@ main()
 npx hardhat run ./scripts/run.js
 ```
 
-![npx-hardhat-run-script-first-time](../minting-an-nft/assets/npx-hardhat-run-script-first-time.png)
+![npx-hardhat-run-script-first-time](./assets/npx-hardhat-run-script-first-time.png)
 
 ## Start the next app
 
@@ -184,7 +184,7 @@ export default handler;
 curl --location --request GET 'localhost:3000/api/tokens/1'
 ```
 
-![handler-test](../minting-an-nft/assets/handler-test.png)
+![handler-test](./assets/handler-test.png)
 
 ## Finish smart contract logic
 
@@ -227,7 +227,7 @@ npx hardhat run ./scripts/run.js
 
 The output should look something like this.
 
-![npx-hardhat-test-2](../minting-an-nft/assets/npx-hardhat-test-2.png)
+![npx-hardhat-test-2](./assets/npx-hardhat-test-2.png)
 
 ## Deploy Next App to Vercel
 
@@ -237,7 +237,7 @@ My deployment link is [https://website-kzspirq6d-ximxim.vercel.app/](https://web
 
 Running `curl --location --request GET 'https://website-kzspirq6d-ximxim.vercel.app/api/tokens/1'` successfully returns our NFT metadata.
 
-![vercel-test](../minting-an-nft/assets/vercel-test.png)
+![vercel-test](./assets/vercel-test.png)
 
 ## Deploy Smart Contract
 
@@ -250,7 +250,7 @@ echo '{"ALCHEMY_KEY": "", "PRIVATE_KEY": ""}' >> secrets.json
 2. [Create an Alchemy Key](https://docs.alchemy.com/alchemy/introduction/getting-started#1.create-an-alchemy-key) and place it in `secrets.json`.
 2. [Get Metamask Private Key](https://metamask.zendesk.com/hc/en-us/articles/360015289632-How-to-Export-an-Account-Private-Key) and place it in `secrets.json`.
 
-![secrets-json](../minting-an-nft/assets/secrets-json.png)
+![secrets-json](./assets/secrets-json.png)
 
 3. Modify `hardhat.config.js` and add `networks` key to default export using our `secrets.json` file.
 
@@ -320,7 +320,7 @@ npx hardhat run --network rinkeby ./scripts/deploy.js
 
 *Note: Keep track of the address hash, we will need this to make requests from the frontend.*
 
-![npx-hardhat-rinkeby](../minting-an-nft/assets/npx-hardhat-rinkeby.png)
+![npx-hardhat-rinkeby](./assets/npx-hardhat-rinkeby.png)
 
 The contract is deployed and an NFT should be minted at this point. Try navigating to this link `https://testnets.opensea.io/assets/<CONTRACT_ADDRESS>/1`.
 
